@@ -19,7 +19,8 @@ while camera:
         time.sleep(6)
 
     cv2.imshow("OurQr-Code-Scanner", frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):  # So if any of us the AuthChain team wants to break this code, we use 'q' to exit
+    if cv2.waitKey(1) & 0xFF == ord('q'):  
+        # So if any of us the AuthChain team wants to break this code, we use 'q' to exit
         break
 
 cam.release()
