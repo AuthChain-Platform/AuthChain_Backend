@@ -7,7 +7,7 @@ def initialize_camera():
   cam.set(6, 480)
   return cam
 
-def scan_qr_from_camera():
+def scan_qr_code():
   cam = initialize_camera()
   try:
       while True:
