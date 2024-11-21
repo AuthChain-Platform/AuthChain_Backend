@@ -1,100 +1,70 @@
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify
 import cv2
 from pyzbar.pyzbar import decode
+import threading
+import time
 
 app = Flask(__name__)
 
-def generate_frames():
-    cam = cv2.VideoCapture(0)
-    cam.set(5, 640)
-    cam.set(6, 480)
-    while True:
-        success, frame = cam.read()
+# Global variables to manage the scanner state
+camera_active = False
+qr_data = None
+
+def start_camera():
+    """Function to start the camera and scan QR codes."""
+    global qr_data, camera_active
+
+    camera = cv2.VideoCapture(0)
+    camera.set(3, 640)  # Set width
+    camera.set(4, 480)  # Set height
+    camera_active = True
+
+    while camera_active:
+        success, frame = camera.read()
         if not success:
+            print("Failed to capture frame")
+            qr_data = {"error": "Failed to capture frame"}
             break
 
+        # Attempt to decode QR code
         decoded_objects = decode(frame)
-        qr_data = []
+        if decoded_objects:
+            for obj in decoded_objects:
+                qr_data = {
+                    "type": obj.type,
+                    "data": obj.data.decode("utf-8")
+                }
+                print(f"Detected QR Code: {qr_data}")  # Debugging info
+                camera_active = False  # Stop scanning after detecting a QR code
+                break
 
-        for obj in decoded_objects:
-            qr_data.append({
-                "type": obj.type,
-                "data": obj.data.decode('utf-8')
-            })
+        time.sleep(0.1)  # Avoid overloading CPU
 
-        # Yield the video frame to the frontend if needed
-        _, buffer = cv2.imencode('.jpg', frame)
-        frame_bytes = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
-        
-        if qr_data:
-            print(qr_data)
-            yield f'data: {qr_data}\n\n'.encode('utf-8')
+    camera.release()
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-    
-    cam.release()
-    cv2.destroyAllWindows()
+@app.route("/scan", methods=["GET"])
+def scan():
+    """
+    API endpoint to scan a QR code and return the result immediately.
+    """
+    global qr_data, camera_active
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    if camera_active:
+        return jsonify({"message": "Camera is already active"}), 400
 
-@app.route('/scan_qr')
-def scan_qr():
-    cam = cv2.VideoCapture(0)
-    cam.set(5, 640)
-    cam.set(6, 480)
-    success, frame = cam.read()
-    qr_data = []
+    # Reset QR data and start the scanner
+    qr_data = None
+    scanner_thread = threading.Thread(target=start_camera)
+    scanner_thread.start()
 
-    if success:
-        decoded_objects = decode(frame)
-        for obj in decoded_objects:
-            qr_data.append({
-                "type": obj.type,
-                "data": obj.data.decode('utf-8')
-            })
+    # Wait for the scanner thread to complete
+    scanner_thread.join()
 
-    cam.release()
-    return jsonify(qr_data)
+    # Return the detected QR code data
+    if qr_data:
+        return jsonify(qr_data), 200
+    else:
+        return jsonify({"message": "No QR code detected"}), 404
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-
-
-# from flask import Flask, request, jsonify
-# import cv2
-# import numpy as np
-# from pyzbar.pyzbar import decode
-
-# app = Flask(__name__)
-
-# @app.route('/scan-qr', methods=['POST'])
-# def scan_qr():
-#     if 'image' not in request.files:
-#         return jsonify({'error': 'No image uploaded'}), 400
-
-#     file = request.files['image']
-#     file_bytes = np.asarray(bytearray(file.read()), dtype=np.uint8)
-#     image = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-
-#     qr_codes = decode(image)
-#     results = []
-
-#     for qr_code in qr_codes:
-#         qr_data = qr_code.data.decode('utf-8')
-#         results.append({
-#             'type': qr_code.type,
-#             'data': qr_data
-#         })
-
-#     return jsonify(results)
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)

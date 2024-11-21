@@ -14,7 +14,7 @@ while camera:
         break
     
     for i in decode(frame):
-        print(i.type)  
+        print(i.type)
         print(i.data.decode('utf-8')) 
         time.sleep(6)
 
@@ -22,7 +22,9 @@ while camera:
     if cv2.waitKey(1) & 0xFF == ord('q'):  
         # So if any of us the AuthChain team wants to break this code, we use 'q' to exit
         break
-
+    
+    
+    
 cam.release()
 cv2.destroyAllWindows()
 

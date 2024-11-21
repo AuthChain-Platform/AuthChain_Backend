@@ -34,17 +34,17 @@ def scan_qr_code_from_camera():
 
     return {"error": "No QR code detected"}
 
-def scan_qr_code_from_image(image_bytes):
-    try:
-        np_image = np.frombuffer(image_bytes, np.uint8)
-        image = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
+# def scan_qr_code_from_image(image_bytes):
+#     try:
+#         np_image = np.frombuffer(image_bytes, np.uint8)
+#         image = cv2.imdecode(np_image, cv2.IMREAD_COLOR)
 
-        for qr_code in decode(image):
-            return {
-                "type": qr_code.type,
-                "data": qr_code.data.decode("utf-8"),
-            }
+#         for qr_code in decode(image):
+#             return {
+#                 "type": qr_code.type,
+#                 "data": qr_code.data.decode("utf-8"),
+#             }
 
-        return {"error": "No QR code detected"}
-    except Exception as e:
-        return {"error": f"Failed to process image: {str(e)}"}
+#         return {"error": "No QR code detected"}
+#     except Exception as e:
+#         return {"error": f"Failed to process image: {str(e)}"}
