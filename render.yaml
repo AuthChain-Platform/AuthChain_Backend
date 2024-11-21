@@ -1,8 +1,7 @@
 services:
   - type: web
     name: authchain-backend
-    env: python
-    buildCommand: |
-      apt-get update && apt-get install -y libzbar0
-      pip install -r requirements.txt
-    startCommand: gunicorn server:app
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free  # Or whichever plan you use
+    healthCheckPath: /
