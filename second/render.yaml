@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: authchain-backend
+    env: docker
+    dockerfilePath: Dockerfile
+    plan: free  # Or whichever plan you use
+    healthCheckPath: /
