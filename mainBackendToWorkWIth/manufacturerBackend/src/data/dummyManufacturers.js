@@ -2,21 +2,20 @@ const manufacturers = [
     {
         verified: true,
         brandName: 'Rite Foods Ng Ltd',
-        registrationNumber: '123456789',
-        country: 'Nigeria',
-        
+        registration_no: '123456789',
+        location: 'Nigeria',
     },
     {
         verified: true,
         brandName: 'Matagbamole Global Industries',
-        registrationNumber: '987654321',
-        country: 'Nigeria',
+        registration_no: '987654321',
+        location: 'Nigeria',
     },
     {
         verified: true,
         brandName: 'DanGari Beverage Productions',
-        registrationNumber: '456123789',
-        country: 'Nigeria',
+        registration_no: '456123789',
+        location: 'Nigeria',
         
     },
   ];

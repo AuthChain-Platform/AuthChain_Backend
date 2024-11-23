@@ -1,13 +1,13 @@
 const manufacturers = require('../data/dummyManufacturers');
 
 exports.verifyManufacturer = async (req, res) => {
-    const { brandName, registrationNumber } = req.body;
+    const { brandName, registration_no } = req.body;
 
     try {
         const manufacturer = manufacturers.find(
             (m) =>
                 m.brandName.toLowerCase() === brandName.toLowerCase() &&
-                m.registrationNumber === registrationNumber
+                m.registration_no === registration_no
         );
 
         if (!manufacturer) {
