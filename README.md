@@ -61,7 +61,7 @@ This is a Node.js-based backend API that verifies manufacturer details provided 
 ### **Base URL**
 
 ```
-[https://manufacturerverification.onrender.com](https://authchain-backend-1-b9sq.onrender.com/api/manufacturers/verify)
+https://authchain-backend-1-b9sq.onrender.com/api/manufacturers/verify
 		or
 
 http://localhost:5000
