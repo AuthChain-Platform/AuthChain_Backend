@@ -7,6 +7,15 @@ const manufacturers = [
     },
     {
         verified: true,
+        brandName: "Folarolls Drinks Ng",
+        registration_no: '098765432',
+        location: 'Nigeria',
+    },
+    {
+
+    },
+    {
+        verified: true,
         brandName: 'Matagbamole Global Industries',
         registration_no: '987654321',
         location: 'Nigeria',
