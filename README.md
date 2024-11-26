@@ -51,7 +51,7 @@ This is a Node.js-based backend API that verifies manufacturer details provided 
     node src/app.js 
     ```
     
-4.  Server runs on [https://manufacturerverification.onrender.com/api/manufacturers/verify](https://manufacturerverification.onrender.com/api/manufacturers/verify)
+4.  Server runs on https://authchain-backend-1-b9sq.onrender.com/
     
 
 ----------
@@ -61,8 +61,9 @@ This is a Node.js-based backend API that verifies manufacturer details provided 
 ### **Base URL**
 
 ```
-https://manufacturerverification.onrender.com
+[https://manufacturerverification.onrender.com](https://authchain-backend-1-b9sq.onrender.com/api/manufacturers/verify)
 		or
+
 http://localhost:5000
 
 ```
